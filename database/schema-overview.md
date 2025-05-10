@@ -94,7 +94,9 @@ This document outlines the structure and meaning of all database tables used in 
 
 
 -- 数据库表的建表语句
+
 -- 1. 用户表
+```sql
 CREATE TABLE users (
   id SERIAL PRIMARY KEY,
   username TEXT UNIQUE NOT NULL,
@@ -103,8 +105,10 @@ CREATE TABLE users (
   role TEXT CHECK (role IN ('admin', 'staff', 'warehouse')),
   created_at TIMESTAMP DEFAULT CURRENT_TIMESTAMP
 );
+```
 
 -- 2. 产品表
+```sql
 CREATE TABLE products (
   id SERIAL PRIMARY KEY,
   name TEXT NOT NULL,
@@ -114,8 +118,10 @@ CREATE TABLE products (
   stock_quantity INTEGER DEFAULT 0,
   created_at TIMESTAMP DEFAULT CURRENT_TIMESTAMP
 );
+```
 
 -- 3. 客户表
+```sql
 CREATE TABLE customers (
   id SERIAL PRIMARY KEY,
   name TEXT NOT NULL,
@@ -124,8 +130,10 @@ CREATE TABLE customers (
   address TEXT,
   created_at TIMESTAMP DEFAULT CURRENT_TIMESTAMP
 );
+```
 
 -- 4. 入库记录表
+```sql
 CREATE TABLE inbound_shipments (
   id SERIAL PRIMARY KEY,
   product_id INTEGER REFERENCES products(id),
@@ -135,8 +143,10 @@ CREATE TABLE inbound_shipments (
   created_by INTEGER REFERENCES users(id),
   created_at TIMESTAMP DEFAULT CURRENT_TIMESTAMP
 );
+```
 
 -- 5. 订单表
+```sql
 CREATE TABLE orders (
   id SERIAL PRIMARY KEY,
   customer_id INTEGER REFERENCES customers(id),
@@ -145,8 +155,10 @@ CREATE TABLE orders (
   is_delivery BOOLEAN DEFAULT FALSE,
   status TEXT CHECK (status IN ('pending', 'fulfilled', 'canceled')) DEFAULT 'pending'
 );
+```
 
 -- 6. 订单明细表
+```sql
 CREATE TABLE order_items (
   id SERIAL PRIMARY KEY,
   order_id INTEGER REFERENCES orders(id),
@@ -154,8 +166,10 @@ CREATE TABLE order_items (
   quantity INTEGER NOT NULL,
   unit_price NUMERIC(10, 2) NOT NULL
 );
+```
 
 -- 7. 配送记录表（可选）
+```sql
 CREATE TABLE delivery (
   id SERIAL PRIMARY KEY,
   order_id INTEGER UNIQUE REFERENCES orders(id),
@@ -164,3 +178,4 @@ CREATE TABLE delivery (
   is_delivered BOOLEAN DEFAULT FALSE,
   notes TEXT
 );
+```
